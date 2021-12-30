@@ -36,11 +36,13 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+///////////////////////////////////////
 //Button scrolling
 btnScrollTo.addEventListener('click', function (e) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
+///////////////////////////////////////
 // Creating elements and appending
 const message = document.createElement('div');
 message.classList.add('cookie-message');
@@ -53,12 +55,14 @@ document
     message.remove();
   });
 
+///////////////////////////////////////
 //Styles
 message.style.backgroundColor = '#37383d';
 
 message.style.height =
   Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
 
+///////////////////////////////////////
 //Page navigation
 // 1. Add event listener to common parent element
 //2. Determne what element originated the event
@@ -74,6 +78,7 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   }
 });
 
+///////////////////////////////////////
 // Tabbed component
 tabContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
@@ -94,6 +99,7 @@ tabContainer.addEventListener('click', function (e) {
     .classList.add('operations__content--active');
 });
 
+///////////////////////////////////////
 // Menu fade animation
 const handleHover = function (e) {
   if (e.target.classList.contains('nav__link')) {
@@ -112,6 +118,7 @@ const handleHover = function (e) {
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
+///////////////////////////////////////
 // Sticky navigation
 // const initialCoords = section1.getBoundingClientRect();
 
@@ -120,7 +127,6 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 //   else nav.classList.remove('sticky');
 // });
 const navHeight = nav.getBoundingClientRect().height;
-console.log(navHeight);
 
 const stickyNav = function (entries) {
   const [entry] = entries;
@@ -135,3 +141,25 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 });
 
 headerObserver.observe(header);
+
+///////////////////////////////////////
+// Reveal section
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(function (section) {
+  console.log(section);
+  section.classList.add('section--hidden');
+  sectionObserver.observe(section);
+});
