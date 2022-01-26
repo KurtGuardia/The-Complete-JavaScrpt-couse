@@ -55,6 +55,20 @@ a:visited {
   margin-bottom: 4rem;
 }
 
+.reset {
+  width: fit-content;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 15px;
+  font-size: 2rem;
+  background-color: #354550;
+}
+
+.reset:hover {
+  cursor: pointer;
+  background-color: #42484d;
+}
+
 .workouts {
   list-style: none;
   height: 77vh;
@@ -85,9 +99,33 @@ a:visited {
 }
 
 .workout__title {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
   font-size: 1.7rem;
   font-weight: 600;
   grid-column: 1 / -1;
+}
+
+.workout__title .edit {
+  transition: all 0.5s;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+}
+
+.workout__title .edit:hover {
+  cursor: pointer;
+  background-color: #176e60;
+}
+
+.workout__title .delete {
+  transition: all 0.5s;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+}
+
+.workout__title .delete:hover {
+  background-color: #b93b00;
 }
 
 .workout__details {

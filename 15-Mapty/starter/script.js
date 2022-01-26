@@ -65,6 +65,8 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const resetBtn = document.querySelector('.reset');
+
 class App {
   #mapEvent;
   #map;
@@ -82,6 +84,9 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    containerWorkouts.addEventListener('click', this._delteWorkout.bind(this));
+    containerWorkouts.addEventListener('click', this._editWorkout.bind(this));
+    resetBtn.addEventListener('click', this._reset.bind(this));
   }
 
   _getPosition() {
@@ -94,6 +99,7 @@ class App {
       );
     }
   }
+
   _loadMap(position) {
     const { latitude } = position.coords;
     const { longitude } = position.coords;
@@ -139,11 +145,11 @@ class App {
   }
 
   _newWorkout(e) {
+    e.preventDefault();
+
     const validInputs = (...inputs) =>
       inputs.every(inp => Number.isFinite(inp));
     const allPositive = (...inputs) => inputs.every(inp => inp > 0);
-
-    e.preventDefault();
 
     // Get data from form
     const type = inputType.value;
@@ -217,7 +223,11 @@ class App {
   _renderWorkout(workout) {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
-        <h2 class="workout__title">${workout.description}</h2>
+        <h2 class="workout__title">${
+          workout.description
+        } <span class="edit" data-id="${
+      workout.id
+    }">Edit</span><span class="delete" data-id="${workout.id}">X</span></h2>
         <div class="workout__details">
           <span class="workout__icon">${
             workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -274,7 +284,7 @@ class App {
       work => work.id === workoutEl.dataset.id
     );
 
-    this.#map.setView(workout.coords, this.#mapZoom, {
+    this.#map.setView(workout.coords, `${this.#mapZoom + 1}`, {
       animate: true,
       pan: {
         duration: 1,
@@ -298,9 +308,29 @@ class App {
     });
   }
 
-  reset() {
+  _delteWorkout(e) {
+    const deleteBtn = e.target.closest('.delete');
+    if (!deleteBtn) return;
+    const workout = this.#workouts.find(
+      work => work.id === deleteBtn.dataset.id
+    );
+
+    this.#workouts.pop(workout);
+    this._setLocalStorage();
+    location.reload();
+  }
+
+  _reset() {
     localStorage.removeItem('workouts');
     location.reload();
+  }
+
+  _editWorkout(e) {
+    const editBtn = e.target.closest('.edit');
+    if (!editBtn) return;
+    const workout = this.#workouts.find(work => work.id === editBtn.dataset.id);
+    this._showForm();
+    console.log(workout);
   }
 }
 
