@@ -154,8 +154,18 @@ TEST COORDINATES 2: -33.933, 18.474
 GOOD LUCK 😀
 */
 
-const whereAmI = function (lat, lng) {
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -166,4 +176,5 @@ const whereAmI = function (lat, lng) {
     .catch(err => console.log(`Something went wrong bro: ${err}`));
 };
 
-whereAmI(-33.933, 18.474);
+// whereAmI(-33.933, 18.474);
+btn.addEventListener('click', whereAmI);
