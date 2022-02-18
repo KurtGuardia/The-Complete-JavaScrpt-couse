@@ -1,0 +1,18 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "Recipe app",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "author": "Kurt Guardia",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.2.1",
+    "parcel": "^2.2.1"
+  },
+  "dependencies": {
+    "fracty": "^1.0.9"
+  }
+}
