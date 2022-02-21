@@ -3,33 +3,13 @@ import View from './View';
 import icons from 'url:../../img/icons.svg';
 import fracty from 'fracty';
 
-class RecipeView {
-  #parentElement = document.querySelector('.recipe');
-  #data;
-  #errorMessage = "We couldn't find that recipe. Please try another one!";
-  #message = '';
+class RecipeView extends View {
+  _parentElement = document.querySelector('.recipe');
+  _errorMessage = "We couldn't find that recipe. Please try another one!";
+  _message = '';
 
-  render(data) {
-    this._data = data;
-    const markup = this._generateMarkup();
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  _clear() {
-    this._parentElement.innerHTML = '';
-  }
-
-  renderSpinner() {
-    const markup = `
-        <div class="spinner">
-        <svg>
-            <use href="${icons}#icon-loader"></use>
-        </svg>
-        </div>
-    `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  addHandlerRender(hander) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, hander));
   }
 
   _generateMarkup() {
@@ -77,9 +57,7 @@ class RecipeView {
           </div>
 
           <div class="recipe__user-generated">
-            <svg>
-              <use href="${icons}#icon-user"></use>
-            </svg>
+            
           </div>
           <button class="btn--round">
             <svg class="">
@@ -114,42 +92,8 @@ class RecipeView {
               <use href="${icons}#icon-arrow-right"></use>
             </svg>
           </a>
-        </div>
-    `;
-  }
-
-  renderError(message = this._errorMessage) {
-    const markup = `
-      <div class="error">
-        <div>
-          <svg>
-            <use href="${icons}#icon-alert-triangle"></use>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>
-    `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  renderMessage(message = this._message) {
-    const markup = `
-      <div class="message">
-        <div>
-          <svg>
-            <use href="${icons}#icon-smile"></use>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>
-    `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  addHandlerRender(hander) {
-    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, hander));
+          </div>
+          `;
   }
 
   _generateMarkupIng(ing) {
