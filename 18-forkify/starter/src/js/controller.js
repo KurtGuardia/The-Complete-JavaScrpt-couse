@@ -1,16 +1,18 @@
 import * as model from './model';
 import recipeView from './views/recipeView';
 import searchView from './views/searchView';
-
-// import coreJs from 'core-js';
-import 'regenerator-runtime';
 import resultsView from './views/resultsView';
 import paginationView from './views/paginationView';
+import bookmarksView from './views/bookmarksView';
+
+import 'regenerator-runtime';
+// import coreJs from 'core-js';
 // import { async } from 'regenerator-runtime';
 
 if (module.hot) {
   module.hot.accept();
 }
+
 ///////////////////////////////////////
 
 const controlRecipes = async function () {
@@ -23,13 +25,17 @@ const controlRecipes = async function () {
     // 0) Update results view to mark selected search result
     resultsView.update(model.getResultsPerPage());
 
-    // 1) loading recipe
+    // 1) Updating bookmarks view
+    bookmarksView.update(model.state.bookmarks);
+
+    // 2) loading recipe
     await model.loadRecipe(id);
 
-    // 2) rendering recipe
+    // 3) rendering recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
     recipeView.renderError();
+    console.error(err);
   }
 };
 
@@ -71,9 +77,27 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
+const controlAddBookmark = function () {
+  // 1) Add/Remove bookmark
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else model.deleteBookmark(model.state.recipe.id);
+
+  // 2) Update recipe view
+  recipeView.update(model.state.recipe);
+
+  // 3) Render bookmarks
+  bookmarksView.render(model.state.bookmarks);
+};
+
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
+
 const init = function () {
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
 };
