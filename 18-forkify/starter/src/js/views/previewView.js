@@ -6,7 +6,7 @@ class PreviewView extends View {
 
   _generateMarkup() {
     const id = window.location.hash.slice(1);
-
+    console.log(this._data);
     return `
       <li class="preview">
         <a class="preview__link ${
@@ -22,7 +22,7 @@ class PreviewView extends View {
               this._data.key ? '' : 'hidden'
             }">
               <svg>
-              <use href="${icons}#icon-user"></use>
+                <use href="${icons}#icon-user"></use>
               </svg>
             </div>
           </div>
