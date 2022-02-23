@@ -8,12 +8,10 @@ import addRecipeView from './views/addRecipeView';
 import { MODAL_CLOSE_SEC } from './config';
 
 import 'regenerator-runtime';
-// import coreJs from 'core-js';
-// import { async } from 'regenerator-runtime';
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
 ///////////////////////////////////////
 
